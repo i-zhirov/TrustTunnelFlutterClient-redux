@@ -17,6 +17,7 @@ import 'package:vpn_plugin/models/configuration.dart';
 import 'package:vpn_plugin/models/configuration_log_level.dart';
 import 'package:vpn_plugin/models/endpoint.dart';
 import 'package:vpn_plugin/models/ini_document.dart';
+import 'package:vpn_plugin/models/listener_mode.dart';
 import 'package:vpn_plugin/models/socks.dart';
 import 'package:vpn_plugin/models/tls_profile.dart';
 import 'package:vpn_plugin/models/tun.dart';
@@ -171,11 +172,13 @@ abstract class ConfigurationSectionConverter<Input, Output> extends Converter<In
 final class ConfigurationEncoder extends Converter<Configuration, String> {
   final ConfigurationSectionConverter<Endpoint, String> endpointEncoder;
   final ConfigurationSectionConverter<Tun, String> tunEncoder;
+  final ConfigurationSectionConverter<Socks, String> socksEncoder;
 
   /// Creates an encoder.
   const ConfigurationEncoder({
     this.endpointEncoder = const EndpointEncoder(),
     this.tunEncoder = const TunEncoder(),
+    this.socksEncoder = const SocksEncoder(),
   });
 
   @override
@@ -191,11 +194,18 @@ final class ConfigurationEncoder extends Converter<Configuration, String> {
 
     final listener = IniDocument()..section(ConfigurationCodecKeys.listenerSection);
 
+    // Exactly one listener is active at a time: emit only the section that
+    // corresponds to the configured [Configuration.listenerMode].
+    final String activeListener = switch (config.listenerMode) {
+      ListenerMode.tun => tunEncoder.convert(config.tun),
+      ListenerMode.socks => socksEncoder.convert(config.socks),
+    };
+
     return (StringBuffer()
           ..write(document)
           ..write(endpointEncoder.convert(config.endpoint))
           ..write(listener)
-          ..write(tunEncoder.convert(config.tun)))
+          ..write(activeListener))
         .toString();
   }
 }
@@ -316,6 +326,15 @@ final class ConfigurationDecoder extends Converter<String, Configuration> {
   Configuration convert(String input) {
     final IniDocument document = IniDocument.parse(input);
 
+    // The active listener is determined by the presence of the corresponding
+    // section. Only one listener is expected to be active at a time; if both
+    // sections are present, the SOCKS listener takes precedence.
+    //
+    // NOTE: this must be checked before accessing sections below, because
+    // [IniDocument.section] creates the section if it is missing.
+    final ListenerMode listenerMode =
+        document.containsSection(ConfigurationCodecKeys.socksSection) ? ListenerMode.socks : ListenerMode.tun;
+
     final IniSection top = document.section(null);
 
     final String logLevelStr = top.getString(ConfigurationCodecKeys.logLevel) ?? ConfigurationLogLevel.debug.value;
@@ -334,6 +353,7 @@ final class ConfigurationDecoder extends Converter<String, Configuration> {
       killSwitchEnabled: killSwitchEnabled,
       postQuantumGroupEnabled: postQuantumGroupEnabled,
       vpnMode: _enumByValue(VpnMode.values, vpnModeStr, (e) => e.value, fallback: VpnMode.general),
+      listenerMode: listenerMode,
       endpoint: endpointDecoder.convert(document),
       tun: tunDecoder.convert(document),
       socks: socksDecoder.convert(document),
