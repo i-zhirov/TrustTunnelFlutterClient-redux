@@ -281,5 +281,16 @@
   },
   "updateAvailable": "Update available",
   "tryAgain": "Try again",
-  "general": "General"
+  "general": "General",
+  "socksProxySettings": "SOCKS5 proxy",
+  "connectionMode": "Connection mode",
+  "tunMode": "TUN",
+  "tunModeDescription": "Route traffic through a virtual network interface",
+  "socksProxyMode": "SOCKS5 proxy",
+  "socksProxyModeDescription": "Expose a local SOCKS5 proxy instead of a virtual network interface",
+  "proxyParameters": "Proxy parameters",
+  "proxyPort": "Port",
+  "proxyPortHint": "1080",
+  "proxyUsername": "Proxy username",
+  "proxyPassword": "Proxy password"
 }

@@ -12,6 +12,8 @@ import 'package:trusttunnel/feature/settings/launch_and_connection/widgets/launc
 import 'package:trusttunnel/feature/settings/launch_and_connection/widgets/scope/launch_and_connection_scope.dart';
 import 'package:trusttunnel/feature/settings/query_log/widgets/query_log_screen.dart';
 import 'package:trusttunnel/feature/settings/settings/widgets/download_app_logs_tile.dart';
+import 'package:trusttunnel/feature/settings/socks_proxy/widgets/scope/socks_proxy_scope.dart';
+import 'package:trusttunnel/feature/settings/socks_proxy/widgets/socks_proxy_screen.dart';
 import 'package:trusttunnel/widgets/common/custom_arrow_list_tile.dart';
 import 'package:trusttunnel/widgets/custom_app_bar.dart';
 import 'package:trusttunnel/widgets/scaffold_wrapper.dart';
@@ -43,6 +45,10 @@ class SettingsScreen extends StatelessWidget {
                 CustomArrowListTile(
                   title: context.ln.excludedRoutes,
                   onTap: () => _pushExcludedRoutesScreen(context),
+                ),
+                CustomArrowListTile(
+                  title: context.ln.socksProxySettings,
+                  onTap: () => _pushSocksProxyScreen(context),
                 ),
                 CustomArrowListTile(
                   title: context.ln.appLogging,
@@ -88,6 +94,12 @@ class SettingsScreen extends StatelessWidget {
 
   void _pushExcludedRoutesScreen(BuildContext context) => context.push(
     const ExcludedRoutesScreen(),
+  );
+
+  void _pushSocksProxyScreen(BuildContext context) => context.push(
+    const SocksProxyScope(
+      child: SocksProxyScreen(),
+    ),
   );
 
   void _pushAppVersionScreen(BuildContext context) => context.push(
