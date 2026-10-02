@@ -8,6 +8,7 @@ import 'package:trusttunnel/data/repository/open_main_window_on_login_repository
 import 'package:trusttunnel/data/repository/routing_repository.dart';
 import 'package:trusttunnel/data/repository/server_repository.dart';
 import 'package:trusttunnel/data/repository/settings_repository.dart';
+import 'package:trusttunnel/data/repository/socks_settings_repository.dart';
 import 'package:trusttunnel/data/repository/vpn_repository.dart';
 import 'package:trusttunnel/di/model/dependency_factory.dart';
 
@@ -33,6 +34,8 @@ abstract class RepositoryFactory {
   OpenMainWindowOnLoginRepository get openMainWindowOnLoginRepository;
 
   AutoConnectOnLaunchSettingsRepository get autoConnectOnLaunchSettingsRepository;
+
+  SocksSettingsRepository get socksSettingsRepository;
 }
 
 class RepositoryFactoryImpl implements RepositoryFactory {
@@ -63,6 +66,8 @@ class RepositoryFactoryImpl implements RepositoryFactory {
   OpenMainWindowOnLoginRepository? _openMainWindowOnLoginRepository;
 
   AutoConnectOnLaunchSettingsRepository? _autoConnectOnLaunchSettingsRepository;
+
+  SocksSettingsRepository? _socksSettingsRepository;
 
   @override
   AppUpdatingRepository get appUpdatingRepository => _appUpdatingRepository ??= AppUpdatingRepositoryImpl(
@@ -124,5 +129,11 @@ class RepositoryFactoryImpl implements RepositoryFactory {
   AutoConnectOnLaunchSettingsRepository get autoConnectOnLaunchSettingsRepository =>
       _autoConnectOnLaunchSettingsRepository ??= AutoConnectOnLaunchSettingsRepositoryImpl(
         dataSource: _dependencyFactory.autoConnectOnLaunchSettingsDataSource,
+      );
+
+  @override
+  SocksSettingsRepository get socksSettingsRepository =>
+      _socksSettingsRepository ??= SocksSettingsRepositoryImpl(
+        dataSource: _dependencyFactory.socksSettingsDataSource,
       );
 }

@@ -27,6 +27,7 @@ import 'package:trusttunnel/data/datasources/local_sources/logs_local_source_imp
 import 'package:trusttunnel/data/datasources/local_sources/routing_datasource_impl.dart';
 import 'package:trusttunnel/data/datasources/local_sources/server_datasource_impl.dart';
 import 'package:trusttunnel/data/datasources/local_sources/settings_datasource_impl.dart';
+import 'package:trusttunnel/data/datasources/local_sources/socks_settings_datasource_impl.dart';
 import 'package:trusttunnel/data/datasources/local_sources/vpn_profile_server_datasource_impl.dart';
 import 'package:trusttunnel/data/datasources/logging_settings_datasource.dart';
 import 'package:trusttunnel/data/datasources/logs_local_source.dart';
@@ -40,6 +41,7 @@ import 'package:trusttunnel/data/datasources/remote_sources/releases_datasource_
 import 'package:trusttunnel/data/datasources/routing_datasource.dart';
 import 'package:trusttunnel/data/datasources/server_datasource.dart';
 import 'package:trusttunnel/data/datasources/settings_datasource.dart';
+import 'package:trusttunnel/data/datasources/socks_settings_datasource.dart';
 import 'package:trusttunnel/data/datasources/vpn_datasource.dart';
 import 'package:trusttunnel/data/datasources/vpn_profile_server_datasource.dart';
 import 'package:trusttunnel/feature/app/controller/app_window_controller.dart';
@@ -96,6 +98,8 @@ abstract class DependencyFactory {
   OpenMainWindowOnLoginDataSource get openMainWindowOnLoginDataSource;
 
   AutoConnectOnLaunchSettingsDataSource get autoConnectOnLaunchSettingsDataSource;
+
+  SocksSettingsDataSource get socksSettingsDataSource;
 
   /// Returns the cached native window controller on macOS and Windows.
   /// Throws on platforms without native window control.
@@ -161,6 +165,8 @@ class DependencyFactoryImpl implements DependencyFactory {
   OpenMainWindowOnLoginDataSource? _openMainWindowOnLoginDataSource;
 
   AutoConnectOnLaunchSettingsDataSource? _autoConnectOnLaunchSettingsDataSource;
+
+  SocksSettingsDataSource? _socksSettingsDataSource;
 
   AppWindowController? _appWindowController;
 
@@ -284,6 +290,12 @@ class DependencyFactoryImpl implements DependencyFactory {
   @override
   AutoConnectOnLaunchSettingsDataSource get autoConnectOnLaunchSettingsDataSource =>
       _autoConnectOnLaunchSettingsDataSource ??= AutoConnectOnLaunchSettingsDataSourceImpl(
+        preferences: sharedPreferences,
+      );
+
+  @override
+  SocksSettingsDataSource get socksSettingsDataSource =>
+      _socksSettingsDataSource ??= SocksSettingsDataSourceImpl(
         preferences: sharedPreferences,
       );
 
