@@ -6,6 +6,7 @@ import 'package:trusttunnel/common/logging/extensions/vpn_logger_extension.dart'
 import 'package:trusttunnel/common/utils/server_endpoint_encoder.dart';
 import 'package:trusttunnel/common/utils/validation_utils.dart';
 import 'package:trusttunnel/common/utils/vpn_mode_encoder.dart';
+import 'package:trusttunnel/data/datasources/socks_settings_datasource.dart';
 import 'package:trusttunnel/data/datasources/vpn_datasource.dart';
 import 'package:trusttunnel/data/model/routing_mode.dart';
 import 'package:trusttunnel/data/model/routing_profile_data.dart';
@@ -39,10 +40,14 @@ import 'package:vpn_plugin/vpn_plugin.dart';
 class VpnDataSourceImpl implements VpnDataSource {
   final VpnPlugin _platformApi;
 
+  final SocksSettingsDataSource _socksSettingsDataSource;
+
   /// {@macro vpn_data_source_impl}
   VpnDataSourceImpl({
     required VpnPlugin vpnPlugin,
-  }) : _platformApi = vpnPlugin {
+    required SocksSettingsDataSource socksSettingsDataSource,
+  }) : _platformApi = vpnPlugin,
+       _socksSettingsDataSource = socksSettingsDataSource {
     final platformStates = _platformApi.states;
     final platformQueryLog = _platformApi.queryLog;
 
@@ -102,6 +107,7 @@ class VpnDataSourceImpl implements VpnDataSource {
     required VpnConfigurationLogLevel logLevel,
     bool fallIntoRecovery = false,
   }) async {
+    final socksSettings = await _socksSettingsDataSource.getSettings();
     final endPoint = _createEndpoint(server, routingProfile);
 
     Future<void> command() => _platformApi.start(
@@ -111,11 +117,16 @@ class VpnDataSourceImpl implements VpnDataSource {
         vpnMode: VpnModeEncoder().convert(
           routingProfile.defaultMode,
         ),
+        listenerMode: socksSettings.mode,
         endpoint: endPoint,
         tun: Tun(
           excludedRoutes: excludedRoutes,
         ),
-        socks: const Socks(),
+        socks: Socks(
+          address: socksSettings.address,
+          username: socksSettings.username,
+          password: socksSettings.password,
+        ),
       ),
     );
 
@@ -127,6 +138,8 @@ class VpnDataSourceImpl implements VpnDataSource {
           server: server,
           routingProfile: routingProfile,
           excludedRoutes: excludedRoutes,
+          listenerMode: socksSettings.mode.value,
+          socksPort: socksSettings.port,
         ).toJson(),
       );
 
@@ -161,6 +174,7 @@ class VpnDataSourceImpl implements VpnDataSource {
     required List<String> excludedRoutes,
     required VpnConfigurationLogLevel logLevel,
   }) async {
+    final socksSettings = await _socksSettingsDataSource.getSettings();
     final endPoint = _createEndpoint(server, routingProfile);
 
     Future<void> command() => _platformApi.updateConfiguration(
@@ -169,11 +183,16 @@ class VpnDataSourceImpl implements VpnDataSource {
         vpnMode: VpnModeEncoder().convert(
           routingProfile.defaultMode,
         ),
+        listenerMode: socksSettings.mode,
         endpoint: endPoint,
         tun: Tun(
           excludedRoutes: excludedRoutes,
         ),
-        socks: const Socks(),
+        socks: Socks(
+          address: socksSettings.address,
+          username: socksSettings.username,
+          password: socksSettings.password,
+        ),
       ),
     );
 
@@ -185,6 +204,8 @@ class VpnDataSourceImpl implements VpnDataSource {
           server: server,
           routingProfile: routingProfile,
           excludedRoutes: excludedRoutes,
+          listenerMode: socksSettings.mode.value,
+          socksPort: socksSettings.port,
         ).toJson(),
       );
 

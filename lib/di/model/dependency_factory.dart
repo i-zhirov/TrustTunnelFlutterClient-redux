@@ -240,6 +240,7 @@ class DependencyFactoryImpl implements DependencyFactory {
   @override
   VpnDataSource get vpnDataSource => _vpnDataSource ??= VpnDataSourceImpl(
     vpnPlugin: vpnPlugin,
+    socksSettingsDataSource: socksSettingsDataSource,
   );
 
   @override
