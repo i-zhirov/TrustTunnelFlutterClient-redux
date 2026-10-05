@@ -282,7 +282,6 @@
   "updateAvailable": "Update available",
   "tryAgain": "Try again",
   "general": "General",
-  "socksProxySettings": "SOCKS5 proxy",
   "connectionMode": "Connection mode",
   "tunMode": "TUN",
   "tunModeDescription": "Route traffic through a virtual network interface",

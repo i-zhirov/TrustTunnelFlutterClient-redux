@@ -47,7 +47,7 @@ class SettingsScreen extends StatelessWidget {
                   onTap: () => _pushExcludedRoutesScreen(context),
                 ),
                 CustomArrowListTile(
-                  title: context.ln.socksProxySettings,
+                  title: context.ln.connectionMode,
                   onTap: () => _pushSocksProxyScreen(context),
                 ),
                 CustomArrowListTile(
