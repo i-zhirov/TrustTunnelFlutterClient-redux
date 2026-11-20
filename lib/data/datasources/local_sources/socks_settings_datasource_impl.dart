@@ -22,8 +22,8 @@ class SocksSettingsDataSourceImpl implements SocksSettingsDataSource {
   final SharedPreferences _preferences;
 
   SocksSettingsDataSourceImpl({
-    required SharedPreferences preferences,
-  }) : _preferences = preferences;
+    required this._preferences,
+  });
 
   @override
   Future<SocksSettings> getSettings() async => SocksSettings(

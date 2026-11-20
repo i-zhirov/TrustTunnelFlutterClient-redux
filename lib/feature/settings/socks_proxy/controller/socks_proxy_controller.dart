@@ -16,9 +16,9 @@ final class SocksProxyController extends BaseStateController<SocksProxyState> wi
 
   /// {@macro socks_proxy_controller}
   SocksProxyController({
-    required SocksSettingsRepository repository,
+    required this._repository,
     super.initialState = const SocksProxyState.initial(),
-  }) : _repository = repository;
+  });
 
   /// Loads the current settings.
   void fetch() => handle(

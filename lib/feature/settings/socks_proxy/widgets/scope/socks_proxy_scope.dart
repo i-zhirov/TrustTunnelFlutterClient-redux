@@ -81,8 +81,7 @@ class _SocksProxyScopeState extends State<SocksProxyScope> {
   }
 }
 
-class _InheritedSocksProxyScope extends InheritedModel<SocksProxyScopeAspect>
-    implements SocksProxyScopeController {
+class _InheritedSocksProxyScope extends InheritedModel<SocksProxyScopeAspect> implements SocksProxyScopeController {
   const _InheritedSocksProxyScope({
     required super.child,
     required this.loading,

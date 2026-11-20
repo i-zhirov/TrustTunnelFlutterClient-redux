@@ -45,9 +45,8 @@ class VpnDataSourceImpl implements VpnDataSource {
   /// {@macro vpn_data_source_impl}
   VpnDataSourceImpl({
     required VpnPlugin vpnPlugin,
-    required SocksSettingsDataSource socksSettingsDataSource,
-  }) : _platformApi = vpnPlugin,
-       _socksSettingsDataSource = socksSettingsDataSource {
+    required this._socksSettingsDataSource,
+  }) : _platformApi = vpnPlugin {
     final platformStates = _platformApi.states;
     final platformQueryLog = _platformApi.queryLog;
 

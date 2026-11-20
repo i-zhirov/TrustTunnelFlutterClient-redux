@@ -295,10 +295,9 @@ class DependencyFactoryImpl implements DependencyFactory {
       );
 
   @override
-  SocksSettingsDataSource get socksSettingsDataSource =>
-      _socksSettingsDataSource ??= SocksSettingsDataSourceImpl(
-        preferences: sharedPreferences,
-      );
+  SocksSettingsDataSource get socksSettingsDataSource => _socksSettingsDataSource ??= SocksSettingsDataSourceImpl(
+    preferences: sharedPreferences,
+  );
 
   @override
   AppWindowController get appWindowController => switch (defaultTargetPlatform) {

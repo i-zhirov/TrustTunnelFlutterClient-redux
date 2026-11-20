@@ -132,8 +132,7 @@ class RepositoryFactoryImpl implements RepositoryFactory {
       );
 
   @override
-  SocksSettingsRepository get socksSettingsRepository =>
-      _socksSettingsRepository ??= SocksSettingsRepositoryImpl(
-        dataSource: _dependencyFactory.socksSettingsDataSource,
-      );
+  SocksSettingsRepository get socksSettingsRepository => _socksSettingsRepository ??= SocksSettingsRepositoryImpl(
+    dataSource: _dependencyFactory.socksSettingsDataSource,
+  );
 }

@@ -35,8 +35,8 @@ class SocksSettingsRepositoryImpl implements SocksSettingsRepository {
   final SocksSettingsDataSource _dataSource;
 
   SocksSettingsRepositoryImpl({
-    required SocksSettingsDataSource dataSource,
-  }) : _dataSource = dataSource;
+    required this._dataSource,
+  });
 
   @override
   Future<SocksSettings> getSettings() => _dataSource.getSettings();
