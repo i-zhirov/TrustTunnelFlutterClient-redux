@@ -14,6 +14,7 @@ import 'package:trusttunnel/feature/settings/query_log/widgets/query_log_screen.
 import 'package:trusttunnel/feature/settings/settings/widgets/download_app_logs_tile.dart';
 import 'package:trusttunnel/feature/settings/socks_proxy/widgets/scope/socks_proxy_scope.dart';
 import 'package:trusttunnel/feature/settings/socks_proxy/widgets/socks_proxy_screen.dart';
+import 'package:trusttunnel/feature/settings/theme/widgets/theme_screen.dart';
 import 'package:trusttunnel/widgets/common/custom_arrow_list_tile.dart';
 import 'package:trusttunnel/widgets/custom_app_bar.dart';
 import 'package:trusttunnel/widgets/scaffold_wrapper.dart';
@@ -53,6 +54,10 @@ class SettingsScreen extends StatelessWidget {
                 CustomArrowListTile(
                   title: context.ln.appLogging,
                   onTap: () => _pushAppLoggingScreen(context),
+                ),
+                CustomArrowListTile(
+                  title: context.ln.appearance,
+                  onTap: () => _pushThemeScreen(context),
                 ),
                 const DownloadAppLogsTile(),
               ],
@@ -100,6 +105,10 @@ class SettingsScreen extends StatelessWidget {
     const SocksProxyScope(
       child: SocksProxyScreen(),
     ),
+  );
+
+  void _pushThemeScreen(BuildContext context) => context.push(
+    const ThemeScreen(),
   );
 
   void _pushAppVersionScreen(BuildContext context) => context.push(

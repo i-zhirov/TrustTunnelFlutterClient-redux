@@ -9,6 +9,7 @@ import 'package:trusttunnel/common/constants/app_constants.dart';
 import 'package:trusttunnel/common/constants/app_update_constants.dart';
 import 'package:trusttunnel/common/network/models/http_client_configuration.dart';
 import 'package:trusttunnel/common/network/network_client.dart';
+import 'package:trusttunnel/common/theme/dark_theme.dart';
 import 'package:trusttunnel/common/theme/light_theme.dart';
 import 'package:trusttunnel/common/utils/certificate_encoders.dart';
 import 'package:trusttunnel/data/database/app_database.dart' as db;
@@ -28,6 +29,7 @@ import 'package:trusttunnel/data/datasources/local_sources/routing_datasource_im
 import 'package:trusttunnel/data/datasources/local_sources/server_datasource_impl.dart';
 import 'package:trusttunnel/data/datasources/local_sources/settings_datasource_impl.dart';
 import 'package:trusttunnel/data/datasources/local_sources/socks_settings_datasource_impl.dart';
+import 'package:trusttunnel/data/datasources/local_sources/theme_settings_datasource_impl.dart';
 import 'package:trusttunnel/data/datasources/local_sources/vpn_profile_server_datasource_impl.dart';
 import 'package:trusttunnel/data/datasources/logging_settings_datasource.dart';
 import 'package:trusttunnel/data/datasources/logs_local_source.dart';
@@ -42,6 +44,7 @@ import 'package:trusttunnel/data/datasources/routing_datasource.dart';
 import 'package:trusttunnel/data/datasources/server_datasource.dart';
 import 'package:trusttunnel/data/datasources/settings_datasource.dart';
 import 'package:trusttunnel/data/datasources/socks_settings_datasource.dart';
+import 'package:trusttunnel/data/datasources/theme_settings_datasource.dart';
 import 'package:trusttunnel/data/datasources/vpn_datasource.dart';
 import 'package:trusttunnel/data/datasources/vpn_profile_server_datasource.dart';
 import 'package:trusttunnel/feature/app/controller/app_window_controller.dart';
@@ -70,6 +73,8 @@ abstract class DependencyFactory {
   NetworkClient get fileDownloadClient;
 
   ThemeData get lightThemeData;
+
+  ThemeData get darkThemeData;
 
   VpnPlugin get vpnPlugin;
 
@@ -100,6 +105,8 @@ abstract class DependencyFactory {
   AutoConnectOnLaunchSettingsDataSource get autoConnectOnLaunchSettingsDataSource;
 
   SocksSettingsDataSource get socksSettingsDataSource;
+
+  ThemeSettingsDataSource get themeSettingsDataSource;
 
   /// Returns the cached native window controller on macOS and Windows.
   /// Throws on platforms without native window control.
@@ -140,6 +147,8 @@ class DependencyFactoryImpl implements DependencyFactory {
 
   ThemeData? _lightThemeData;
 
+  ThemeData? _darkThemeData;
+
   VpnPlugin? _vpnPlugin;
 
   DeepLinkManager? _deepLinkManager;
@@ -167,6 +176,8 @@ class DependencyFactoryImpl implements DependencyFactory {
   AutoConnectOnLaunchSettingsDataSource? _autoConnectOnLaunchSettingsDataSource;
 
   SocksSettingsDataSource? _socksSettingsDataSource;
+
+  ThemeSettingsDataSource? _themeSettingsDataSource;
 
   AppWindowController? _appWindowController;
 
@@ -212,6 +223,9 @@ class DependencyFactoryImpl implements DependencyFactory {
 
   @override
   ThemeData get lightThemeData => _lightThemeData ??= LightTheme().data;
+
+  @override
+  ThemeData get darkThemeData => _darkThemeData ??= DarkTheme().data;
 
   @override
   VpnPlugin get vpnPlugin => _vpnPlugin ??= VpnPluginImpl();
@@ -296,6 +310,11 @@ class DependencyFactoryImpl implements DependencyFactory {
 
   @override
   SocksSettingsDataSource get socksSettingsDataSource => _socksSettingsDataSource ??= SocksSettingsDataSourceImpl(
+    preferences: sharedPreferences,
+  );
+
+  @override
+  ThemeSettingsDataSource get themeSettingsDataSource => _themeSettingsDataSource ??= ThemeSettingsDataSourceImpl(
     preferences: sharedPreferences,
   );
 
