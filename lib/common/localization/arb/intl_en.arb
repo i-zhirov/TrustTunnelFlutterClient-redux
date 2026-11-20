@@ -200,5 +200,12 @@
   "openHomeScreenAutomatically": "Open Home screen automatically",
   "connection": "Connection",
   "autoConnectOnAppLaunch": "Auto-connect on app launch",
-  "autoConnectNoServersAdded": "No servers added. To apply the setting, add a server"
+  "autoConnectNoServersAdded": "No servers added. To apply the setting, add a server",
+  "appearance": "Appearance",
+  "themeModeSystem": "System",
+  "themeModeSystemDescription": "Use the same theme as your device",
+  "themeModeLight": "Light",
+  "themeModeLightDescription": "Always use the light theme",
+  "themeModeDark": "Dark",
+  "themeModeDarkDescription": "Always use the dark theme"
 }

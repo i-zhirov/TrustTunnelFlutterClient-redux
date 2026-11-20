@@ -7,6 +7,7 @@ import 'package:trusttunnel/data/repository/open_main_window_on_login_repository
 import 'package:trusttunnel/data/repository/routing_repository.dart';
 import 'package:trusttunnel/data/repository/server_repository.dart';
 import 'package:trusttunnel/data/repository/settings_repository.dart';
+import 'package:trusttunnel/data/repository/theme_settings_repository.dart';
 import 'package:trusttunnel/data/repository/vpn_repository.dart';
 import 'package:trusttunnel/di/model/dependency_factory.dart';
 
@@ -30,6 +31,8 @@ abstract class RepositoryFactory {
   OpenMainWindowOnLoginRepository get openMainWindowOnLoginRepository;
 
   AutoConnectOnLaunchSettingsRepository get autoConnectOnLaunchSettingsRepository;
+
+  ThemeSettingsRepository get themeSettingsRepository;
 }
 
 class RepositoryFactoryImpl implements RepositoryFactory {
@@ -58,6 +61,8 @@ class RepositoryFactoryImpl implements RepositoryFactory {
   OpenMainWindowOnLoginRepository? _openMainWindowOnLoginRepository;
 
   AutoConnectOnLaunchSettingsRepository? _autoConnectOnLaunchSettingsRepository;
+
+  ThemeSettingsRepository? _themeSettingsRepository;
 
   @override
   ServerRepository get serverRepository => _serverRepository ??= ServerRepositoryImpl(
@@ -112,4 +117,9 @@ class RepositoryFactoryImpl implements RepositoryFactory {
       _autoConnectOnLaunchSettingsRepository ??= AutoConnectOnLaunchSettingsRepositoryImpl(
         dataSource: _dependencyFactory.autoConnectOnLaunchSettingsDataSource,
       );
+
+  @override
+  ThemeSettingsRepository get themeSettingsRepository => _themeSettingsRepository ??= ThemeSettingsRepositoryImpl(
+    dataSource: _dependencyFactory.themeSettingsDataSource,
+  );
 }

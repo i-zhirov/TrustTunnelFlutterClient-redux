@@ -3,6 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trusttunnel/common/theme/dark_theme.dart';
 import 'package:trusttunnel/common/theme/light_theme.dart';
 import 'package:trusttunnel/common/utils/certificate_encoders.dart';
 import 'package:trusttunnel/data/database/app_database.dart' as db;
@@ -19,6 +20,7 @@ import 'package:trusttunnel/data/datasources/local_sources/logs_local_source_imp
 import 'package:trusttunnel/data/datasources/local_sources/routing_datasource_impl.dart';
 import 'package:trusttunnel/data/datasources/local_sources/server_datasource_impl.dart';
 import 'package:trusttunnel/data/datasources/local_sources/settings_datasource_impl.dart';
+import 'package:trusttunnel/data/datasources/local_sources/theme_settings_datasource_impl.dart';
 import 'package:trusttunnel/data/datasources/logging_settings_datasource.dart';
 import 'package:trusttunnel/data/datasources/logs_export_destination_datasource.dart';
 import 'package:trusttunnel/data/datasources/logs_local_source.dart';
@@ -29,6 +31,7 @@ import 'package:trusttunnel/data/datasources/open_main_window_on_login_datasourc
 import 'package:trusttunnel/data/datasources/routing_datasource.dart';
 import 'package:trusttunnel/data/datasources/server_datasource.dart';
 import 'package:trusttunnel/data/datasources/settings_datasource.dart';
+import 'package:trusttunnel/data/datasources/theme_settings_datasource.dart';
 import 'package:trusttunnel/data/datasources/vpn_datasource.dart';
 import 'package:trusttunnel/feature/app/controller/app_window_controller.dart';
 import 'package:trusttunnel/feature/app/controller/macos_app_window_controller.dart';
@@ -43,6 +46,8 @@ abstract class DependencyFactory {
   abstract final FileLogStorage logStorage;
 
   ThemeData get lightThemeData;
+
+  ThemeData get darkThemeData;
 
   VpnPlugin get vpnPlugin;
 
@@ -72,6 +77,8 @@ abstract class DependencyFactory {
 
   AutoConnectOnLaunchSettingsDataSource get autoConnectOnLaunchSettingsDataSource;
 
+  ThemeSettingsDataSource get themeSettingsDataSource;
+
   AppWindowController get appWindowController;
 
   db.AppDatabase get database;
@@ -94,6 +101,8 @@ class DependencyFactoryImpl implements DependencyFactory {
   });
 
   ThemeData? _lightThemeData;
+
+  ThemeData? _darkThemeData;
 
   VpnPlugin? _vpnPlugin;
 
@@ -123,12 +132,17 @@ class DependencyFactoryImpl implements DependencyFactory {
 
   AutoConnectOnLaunchSettingsDataSource? _autoConnectOnLaunchSettingsDataSource;
 
+  ThemeSettingsDataSource? _themeSettingsDataSource;
+
   AppWindowController? _appWindowController;
 
   db.AppDatabase? _database;
 
   @override
   ThemeData get lightThemeData => _lightThemeData ??= LightTheme().data;
+
+  @override
+  ThemeData get darkThemeData => _darkThemeData ??= DarkTheme().data;
 
   @override
   VpnPlugin get vpnPlugin => _vpnPlugin ??= VpnPluginImpl();
@@ -205,6 +219,11 @@ class DependencyFactoryImpl implements DependencyFactory {
       _autoConnectOnLaunchSettingsDataSource ??= AutoConnectOnLaunchSettingsDataSourceImpl(
         preferences: sharedPreferences,
       );
+
+  @override
+  ThemeSettingsDataSource get themeSettingsDataSource => _themeSettingsDataSource ??= ThemeSettingsDataSourceImpl(
+    preferences: sharedPreferences,
+  );
 
   @override
   AppWindowController get appWindowController => _appWindowController ??= switch (defaultTargetPlatform) {
